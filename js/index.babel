@@ -29,6 +29,7 @@ d3.json("https://raw.githubusercontent.com/DealPete/forceDirected/master/countri
 		.attr("width", 25)
 		.attr("height", 15)
 		.attr("href", d => url + d.code + ".svg")
+		.call(d3.drag)
 		.on("mouseover", d => {
 			tooltips.transition()
 				.duration(200)
