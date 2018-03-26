@@ -50,13 +50,13 @@ d3.json("https://raw.githubusercontent.com/DealPete/forceDirected/master/countri
 		});
 
 
-		link.attr('x1', function(d) {
+		link.attr("x1", function(d) {
 			return d.source.x;
-		}).attr('x2', function(d) {
+		}).attr("x2", function(d) {
 			return d.target.x;
-		}).attr('y1', function(d) {
+		}).attr("y1", function(d) {
 			return d.source.y;
-		}).attr('y2', function(d) {
+		}).attr("y2", function(d) {
 			return d.target.y;
 		});
 

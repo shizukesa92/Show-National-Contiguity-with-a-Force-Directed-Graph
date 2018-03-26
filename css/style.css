@@ -77,3 +77,8 @@ h3 {
         pointer-events: none;
         color: white;
 }
+
+line {
+        stroke: black;
+        stroke-opacity: 0.6;
+}
