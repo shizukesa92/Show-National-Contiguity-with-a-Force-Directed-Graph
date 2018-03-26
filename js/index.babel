@@ -2,7 +2,7 @@ d3.json("https://raw.githubusercontent.com/DealPete/forceDirected/master/countri
 	if (error) throw error;
 	const nodes = data.nodes,
 		links = data.links,
-		url = "https: //cdnjs.cloudflare.com/ajax/libs/flag-icon-css/2.5.0/flags/1x1/";
+		url = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/2.5.0/flags/1x1/";
 
 	const padding = 50,
 		w = document.getElementById("main").clientWidth - padding * 2,
@@ -22,14 +22,37 @@ d3.json("https://raw.githubusercontent.com/DealPete/forceDirected/master/countri
 		.enter()
 		.append("line");
 
-	const node = chart.selectAll("img")
+	const node = chart.selectAll("image")
 		.data(nodes)
 		.enter()
-		.append("img")
+		.append("image")
 		.attr("width", 15)
 		.attr("height", 10)
 		.attr("xlink:href", d => url + d.code + ".svg")
+		.call(d3.drag()
+			.on("start", dragstarted)
+			.on("drag", dragged)
+			.on("end", dragended));
 
+	function dragstarted(d) {
+		if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+		d.fx = d.x;
+		d.fy = d.y;
+	}
+
+	function dragged(d) {
+		d.fx = d3.event.x;
+		d.fy = d3.event.y;
+	}
+
+	function dragended(d) {
+		if (!d3.event.active) simulation.alphaTarget(0);
+		d.fx = null;
+		d.fy = null;
+	}
+
+	node.append("title")
+		.text(d => d.country);
 
 	const simulation = d3.forceSimulation() // https://github.com/d3/d3-force/blob/master/README.md#simulation_force
 		.nodes(nodes)
@@ -43,11 +66,8 @@ d3.json("https://raw.githubusercontent.com/DealPete/forceDirected/master/countri
 		.links(links);
 
 	simulation.on("tick", function() {
-		node.style("left", function(d) {
-			return d.x - 8 + "px";
-		}).style("top", function(d) {
-			return d.y - 5 + "px";
-		});
+		node.attr("x", d => d.x)
+			.attr("y", d => d.y);
 
 
 		link.attr("x1", function(d) {
