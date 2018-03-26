@@ -2,11 +2,11 @@ d3.json("https://raw.githubusercontent.com/DealPete/forceDirected/master/countri
 	if (error) throw error;
 	const nodes = data.nodes,
 		links = data.links,
-		url = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/2.5.0/flags/1x1/";
+		url = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/2.5.0/flags/1x1/"; // Flag pictures, one is missing
 
-	const padding = 50,
-		w = document.getElementById("main").clientWidth - padding * 2,
-		h = document.getElementById("main").clientHeight - padding * 2;
+	const w = document.getElementById("main").clientWidth,
+		h = document.getElementById("main").clientHeight;
+
 
 	var tooltips = d3.select("#main").append("div")
 		.attr("class", "tooltip")
@@ -14,8 +14,8 @@ d3.json("https://raw.githubusercontent.com/DealPete/forceDirected/master/countri
 
 	// Set SVG dimensions and append axes
 	const chart = d3.select("svg")
-		.attr("width", w + padding * 2)
-		.attr("height", h + padding * 2);
+		.attr("width", w)
+		.attr("height", h);
 
 	const link = chart.selectAll("line")
 		.data(links)
@@ -56,7 +56,7 @@ d3.json("https://raw.githubusercontent.com/DealPete/forceDirected/master/countri
 
 	const simulation = d3.forceSimulation() // https://github.com/d3/d3-force/blob/master/README.md#simulation_force
 		.nodes(nodes)
-		.force("charge", d3.forceManyBody().strength(-20))
+		.force("charge", d3.forceManyBody().strength(-75)) // Determines size
 		.force("center", d3.forceCenter(w / 2, h / 2))
 		.force("link", d3.forceLink().distance(10).strength(0.2))
 		.force("x", d3.forceX())
@@ -65,20 +65,20 @@ d3.json("https://raw.githubusercontent.com/DealPete/forceDirected/master/countri
 	simulation.force("link")
 		.links(links);
 
-	simulation.on("tick", function() {
+	simulation.on("tick", () => {
 		node.attr("x", d => d.x)
 			.attr("y", d => d.y);
 
 
-		link.attr("x1", function(d) {
-			return d.source.x;
-		}).attr("x2", function(d) {
-			return d.target.x;
-		}).attr("y1", function(d) {
-			return d.source.y;
-		}).attr("y2", function(d) {
-			return d.target.y;
-		});
+		link.attr("x1", d =>
+			d.source.x
+		).attr("x2", d =>
+			d.target.x
+		).attr("y1", d =>
+			d.source.y
+		).attr("y2", d =>
+			d.target.y
+		);
 
 	});
 
